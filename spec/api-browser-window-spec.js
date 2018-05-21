@@ -1412,6 +1412,7 @@ describe('BrowserWindow module', () => {
         let htmlPath = path.join(fixtures, 'api', 'sandbox.html?verify-ipc-sender')
         const pageUrl = 'file://' + htmlPath
         let childWc
+        ipcRenderer.send('set-web-preferences-on-next-new-window', w.webContents.id, 'preload', preload)
         w.webContents.once('new-window', (e, url, frameName, disposition, options) => {
           childWc = options.webContents
           assert.notEqual(w.webContents, childWc)
@@ -1587,6 +1588,8 @@ describe('BrowserWindow module', () => {
             sandbox: true
           }
         })
+        ipcRenderer.send('set-web-preferences-on-next-new-window', w.webContents.id, 'preload', preload)
+
         w.loadURL('file://' + path.join(fixtures, 'api', 'sandbox.html?reload-remote-child'))
 
         ipcMain.on('get-remote-module-path', (event) => {
